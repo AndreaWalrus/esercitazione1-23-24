@@ -2,6 +2,7 @@
 cmake-build-debug/*
 output/*
 test0
+build/
 
 # Prerequisites
 *.d
