@@ -15,7 +15,7 @@ Image rgb_to_grayscale(const Image &im) {
     Image gray(im.w,im.h,1); // create a new grayscale image (note: 1 channel)
     for(int i=0; i<gray.w; i++){
         for(int j=0; j<gray.h; j++){
-            float gray_value = 0.299*pixel_address(im,i,j,0) * 0.587*pixel_address(im,i,j,1) * 0.114*pixel_address(im,i,j,2);
+            float gray_value = 0.299*im(i,j,0) + 0.587*im(i,j,1) + 0.114*im(i,j,2);
             gray.set_pixel(i,j,0,gray_value);
         }
     }
