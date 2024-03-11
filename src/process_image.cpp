@@ -100,6 +100,7 @@ void rgb_to_hsv(Image &im) {
             R=im(i,j,0);
             G=im(i,j,1);
             B=im(i,j,2);
+
             V = max(R,G,B);
             float C = V-min(R,G,B);
             if(V==0) S=0;
@@ -123,10 +124,33 @@ void rgb_to_hsv(Image &im) {
 // Image& im: input image to be modified in-place
 void hsv_to_rgb(Image &im) {
     assert(im.c==3 && "only works for 3-channels images");
+    float R,G,B,H,S,V;
+    for(int j=0; j<im.h; j++){
+        for(int i=0; i<im.w; i++){
+            H=im(i,j,0);
+            S=im(i,j,1);
+            V=im(i,j,2);
 
-    // TODO: Convert all pixels from HSV format to RGB format
+            float C = V*S;
+            float X = C*(1-abs((fmodf(H*6,2.0))-1));
+            float m = V-C;
 
-    NOT_IMPLEMENTED();
+            if(H<(float)1/6 && H>=0) {R=C; G=X; B=0;}
+            else if(H<(float)2/6 && H>=(float)1/6) {R=X; G=C; B=0;}
+            else if(H<(float)3/6 && H>=(float)2/6) {R=0; G=C; B=X;}
+            else if(H<(float)4/6 && H>=(float)3/6) {R=0; G=X; B=C;}
+            else if(H<(float)5/6 && H>=(float)4/6) {R=X; G=0; B=C;}
+            else if(H<1 && H>=(float)5/6) {R=C; G=0; B=X;}
+
+            R+=m;
+            G+=m;
+            B+=m;
+
+            im.set_pixel(i,j,0,R);
+            im.set_pixel(i,j,1,G);
+            im.set_pixel(i,j,2,B);
+        }
+    }
 }
 
 // HW0 #9
