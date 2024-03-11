@@ -13,13 +13,12 @@ using namespace std;
 Image rgb_to_grayscale(const Image &im) {
     assert(im.c == 3); // only accept RGB images
     Image gray(im.w,im.h,1); // create a new grayscale image (note: 1 channel)
-    for(int i=0; i<gray.w; i++){
-        for(int j=0; j<gray.h; j++){
+    for(int j=0; j<gray.h; j++){
+        for(int i=0; i<gray.w; i++){
             float gray_value = 0.299*im(i,j,0) + 0.587*im(i,j,1) + 0.114*im(i,j,2);
             gray.set_pixel(i,j,0,gray_value);
         }
     }
-
     return gray;
 }
 
@@ -46,10 +45,11 @@ Image grayscale_to_rgb(const Image &im, float r, float g, float b) {
 // float v: how much to shift
 void shift_image(Image &im, int c, float v) {
     assert(c>=0 && c<im.c); // needs to be a valid channel
-
-    // TODO: shift all the pixels at the specified channel
-
-    NOT_IMPLEMENTED();
+    for(int j=0; j<im.h; j++){
+        for(int i=0; i<im.w; i++){
+            im.set_pixel(i,j,c,v+im(i,j,c));
+        }
+    }
 }
 
 // HW0 #8
@@ -69,8 +69,7 @@ void scale_image(Image &im, int c, float v) {
 // HW0 #5
 // Image& im: input image to be modified in-place
 void clamp_image(Image &im) {
-    // TODO: clamp all the pixels in all channel to be between 0 and 1
-
+    
     NOT_IMPLEMENTED();
 }
 
