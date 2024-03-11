@@ -94,11 +94,29 @@ float min(float a, float b, float c) {
 // Image& im: input image to be modified in-place
 void rgb_to_hsv(Image &im) {
     assert(im.c==3 && "only works for 3-channels images");
+    float R,G,B,H,S,V;
+    for(int j=0; j<im.h; j++){
+        for(int i=0; i<im.w; i++){
+            R=im(i,j,0);
+            G=im(i,j,1);
+            B=im(i,j,2);
+            V = max(R,G,B);
+            float C = V-min(R,G,B);
+            if(V==0) S=0;
+            else S=(C)/V;
 
-    // TODO: Convert all pixels from RGB format to HSV format
+            if(C==0) H=0;
+            else if(V==R) H=(G-B)/C;
+            else if(V==G) H=((B-R)/C)+2;
+            else if(V==B) H=((R-G)/C)+4;
 
-    NOT_IMPLEMENTED();
-
+            if(H<0) H=(H/6)+1;
+            else H=H/6;
+            im.set_pixel(i,j,0,H);
+            im.set_pixel(i,j,1,S);
+            im.set_pixel(i,j,2,V);
+        }
+    }
 }
 
 // HW0 #7
