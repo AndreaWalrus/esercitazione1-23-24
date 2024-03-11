@@ -69,8 +69,15 @@ void scale_image(Image &im, int c, float v) {
 // HW0 #5
 // Image& im: input image to be modified in-place
 void clamp_image(Image &im) {
-    
-    NOT_IMPLEMENTED();
+    for(int c=0; c<im.c; c++){
+        for(int j=0; j<im.h; j++){
+            for(int i=0; i<im.w; i++){
+                float val = im(i,j,c);
+                if(val<0) set_pixel(im,i,j,c,0.0);
+                else if(val>1) set_pixel(im,i,j,c,1.0);
+            }
+        }
+    }
 }
 
 // These might be handy
