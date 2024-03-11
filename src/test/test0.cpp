@@ -59,6 +59,7 @@ void test_shift()
   Image im = load_image("data/dog.jpg");
   Image c = im;
   shift_image(c, 1, .1);
+
   TEST(within_eps(im.data[0], c.data[0]));
   TEST(within_eps(im.data[im.w*im.h+13] + .1,  c.data[im.w*im.h + 13]));
   TEST(within_eps(im.data[2*im.w*im.h+72],  c.data[2*im.w*im.h + 72]));
@@ -117,7 +118,7 @@ void run_tests()
   test_grayscale();
   test_rgb_to_hsv();
   test_hsv_to_rgb();
-//  test_rgb2lch2rgb();
+  //test_rgb2lch2rgb();
   printf("%d tests, %d passed, %d failed\n", tests_total, tests_total-tests_fail, tests_fail);
   }
 
@@ -135,5 +136,32 @@ int main(int argc, char **argv)
   
   run_tests();
   
+  // 4. Shift Image
+  Image im3 = load_image("data/dog.jpg");
+  shift_image(im3, 0, .4);
+  shift_image(im3, 1, .4);
+  shift_image(im3, 2, .4);
+  im3.save_image("output/shift_result");
+
+  // 5. Clamp Image
+  clamp_image(im3);
+  im3.save_image("output/clamp_result");
+
+  // 6-7. Colorspace and saturation
+  im3 = load_image("data/dog.jpg");
+  rgb_to_hsv(im3);
+  shift_image(im3, 1, .2);
+  clamp_image(im3);
+  hsv_to_rgb(im3);
+  im3.save_image("output/colorspace_result");
+
+  // 8. Channel Scaling
+  im3 = load_image("data/dog.jpg");
+  rgb_to_hsv(im3);
+  scale_image(im3, 1, 2);
+  clamp_image(im3);
+  hsv_to_rgb(im3);
+  im3.save_image("output/dog_scale_saturated");
+
   return 0;
   }

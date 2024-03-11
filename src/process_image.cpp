@@ -58,11 +58,11 @@ void shift_image(Image &im, int c, float v) {
 // float v: how much to scale
 void scale_image(Image &im, int c, float v) {
     assert(c>=0 && c<im.c); // needs to be a valid channel
-
-    // TODO: scale all the pixels at the specified channel
-
-    NOT_IMPLEMENTED();
-
+    for(int j=0; j<im.h; j++){
+        for(int i=0; i<im.w; i++){
+            im.set_pixel(i,j,c,v*im(i,j,c));
+        }
+    }
 }
 
 
